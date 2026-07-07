@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PBS 컬러강점 · 일반용 결과</title>
+<style>
+:root{
+  --red:#FF3366;--red-bg:#FFF0F4;--yellow:#F5A623;--yellow-bg:#FFF8E6;
+  --green:#00A878;--green-bg:#E6F8F1;--blue:#0077B6;--blue-bg:#E6F4FB;
+  --ink:#1C1A2E;--soft:#524F6A;--muted:#8A87A6;--line:#ECE8F5;
+  --bg:#FBFAFE;--surface:#fff;--r:18px;
+  --brand:linear-gradient(135deg,#232E87,#522F97 60%,#7030A0);
+  --font:'Pretendard Variable','Pretendard',-apple-system,BlinkMacSystemFont,system-ui,'Apple SD Gothic Neo',sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:var(--font);background:var(--bg);color:var(--ink);line-height:1.75;-webkit-font-smoothing:antialiased}
+.wrap{max-width:600px;margin:0 auto;padding:0 16px 60px}
+.top{background:var(--brand);color:#fff;border-radius:0 0 26px 26px;padding:26px 20px 30px;text-align:center}
+.top .badge{display:inline-block;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.28);padding:5px 13px;border-radius:999px;font-size:12px;font-weight:700;margin-bottom:10px}
+.top h1{font-size:22px;font-weight:900;letter-spacing:-.02em}
+.top p{font-size:13.5px;opacity:.95;margin-top:6px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:20px 18px;margin:14px 0;box-shadow:0 4px 14px rgba(80,60,140,.06)}
+.card h2{font-size:19px;font-weight:900;margin-bottom:6px}
+.card .sub{color:var(--soft);font-size:14px;margin-bottom:14px}
+.screen{display:none}.screen.active{display:block;animation:fade .35s ease}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.score-row{display:flex;align-items:center;gap:12px;padding:13px 12px;border-radius:14px;margin-bottom:10px}
+.score-row .dot{width:40px;height:40px;border-radius:11px;display:grid;place-items:center;color:#fff;font-weight:900;font-size:15px;flex-shrink:0}
+.score-row .lab{flex:1}.score-row .lab b{display:block;font-size:16px;font-weight:900}
+.score-row .lab span{font-size:12px;color:var(--soft);font-weight:700}
+.score-row input{width:88px;height:52px;text-align:center;font-size:22px;font-weight:900;font-family:var(--font);border:2px solid var(--line);border-radius:12px;background:#fff;color:var(--ink)}
+.score-row input:focus{outline:none}
+.score-row[data-c="RED"]{background:var(--red-bg)} .score-row[data-c="RED"] input:focus{border-color:var(--red)} .score-row[data-c="RED"] .lab b{color:var(--red)} .score-row[data-c="RED"] .dot{background:var(--red)}
+.score-row[data-c="YELLOW"]{background:var(--yellow-bg)} .score-row[data-c="YELLOW"] input:focus{border-color:var(--yellow)} .score-row[data-c="YELLOW"] .lab b{color:#C9821A} .score-row[data-c="YELLOW"] .dot{background:var(--yellow)}
+.score-row[data-c="GREEN"]{background:var(--green-bg)} .score-row[data-c="GREEN"] input:focus{border-color:var(--green)} .score-row[data-c="GREEN"] .lab b{color:var(--green)} .score-row[data-c="GREEN"] .dot{background:var(--green)}
+.score-row[data-c="BLUE"]{background:var(--blue-bg)} .score-row[data-c="BLUE"] input:focus{border-color:var(--blue)} .score-row[data-c="BLUE"] .lab b{color:var(--blue)} .score-row[data-c="BLUE"] .dot{background:var(--blue)}
+.hint{font-size:12.5px;color:var(--muted);text-align:center;margin:4px 0 12px}
+.btn{display:block;width:100%;border:none;border-radius:999px;padding:17px;font-size:17px;font-weight:900;font-family:var(--font);cursor:pointer;color:#fff;background:var(--brand);box-shadow:0 8px 20px rgba(80,50,140,.32);transition:transform .15s}
+.btn:active{transform:scale(.98)}
+.btn.ghost{background:#fff;color:#522F97;border:2px solid #E4D5F3;box-shadow:none}
+.remain{text-align:center;font-size:13px;color:var(--soft);font-weight:700;margin-top:10px}
+.hero{border-radius:22px;padding:30px 20px;text-align:center;color:#fff}
+.hero .kicker{font-size:13px;font-weight:800;opacity:.9;letter-spacing:.08em}
+.hero h2{font-size:27px;font-weight:900;margin:4px 0}
+.hero .stitle{font-size:14px;font-weight:700;opacity:.95}
+.hero .quote{font-size:14.5px;font-style:italic;opacity:.95;margin-top:12px;border-top:1px solid rgba(255,255,255,.28);padding-top:12px}
+.bar{display:flex;align-items:center;gap:10px;margin:9px 0}
+.bar .bd{width:26px;height:26px;border-radius:8px;color:#fff;font-weight:900;font-size:11px;display:grid;place-items:center;flex-shrink:0}
+.bar .bt{flex:1}
+.bar .bt .n{display:flex;justify-content:space-between;font-size:12.5px;font-weight:800;margin-bottom:3px}
+.bar .track{height:12px;background:#F0ECF8;border-radius:999px;overflow:hidden}
+.bar .fill{height:100%;border-radius:999px}
+.sec{margin-top:18px;padding-top:16px;border-top:1px solid var(--line)}
+.sec:first-child{border-top:none;padding-top:0;margin-top:0}
+.sec h3{font-size:16.5px;font-weight:900;margin-bottom:8px;display:flex;align-items:center;gap:7px}
+.sec p{font-size:14.5px;color:#37324a;line-height:1.85;margin-bottom:8px}
+.sec ul{list-style:none}
+.sec li{font-size:14.5px;color:#37324a;padding:5px 0 5px 24px;position:relative;line-height:1.65}
+.sec li::before{content:"✦";position:absolute;left:0;font-size:12px;top:7px;color:var(--muted)}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
+.chips span{background:#F4F0FB;color:#5A3E8C;font-size:13px;font-weight:800;padding:7px 13px;border-radius:999px}
+.chips.job span{background:#EAF6FF;color:#0F5E8C}
+.val{margin:10px 0;padding:12px 14px;background:#FAF8FE;border-radius:12px;border-left:3px solid #B36BE0}
+.val b{font-size:14.5px;color:#4A2E7A}
+.val p{font-size:13.8px;color:#4b4560;margin:4px 0 0;line-height:1.75}
+.val .basis{font-size:12px;color:var(--muted);margin-top:6px;line-height:1.65}
+.mini{display:grid;grid-template-columns:1fr;gap:8px;margin-top:6px}
+.mini div{background:#F7F5FC;border-radius:10px;padding:11px 13px;font-size:13.8px;color:#4b4560;line-height:1.7}
+.mini b{color:var(--ink)}
+.affirm{background:#F5EEFA;border-radius:14px;padding:14px 16px;margin-top:8px}
+.affirm p{font-size:14.5px;font-weight:700;color:#5A3E8C;padding:5px 0 5px 20px;position:relative;line-height:1.6}
+.affirm p::before{content:"“";position:absolute;left:0;font-size:20px;color:#B36BE0;line-height:1}
+.field{margin-bottom:14px}
+.field label{display:block;font-size:14.5px;font-weight:800;margin-bottom:7px}
+.field textarea{width:100%;min-height:90px;font-family:var(--font);font-size:15px;padding:12px;border:2px solid var(--line);border-radius:12px;resize:vertical}
+.field textarea:focus{outline:none;border-color:#B36BE0}
+.stars{font-size:36px;letter-spacing:6px;cursor:pointer;user-select:none;text-align:center}
+.stars span{color:#E3DFF0}
+#imgprev img{max-width:100%;max-height:220px;border-radius:12px;margin-top:8px;border:1px solid var(--line)}
+.more{background:linear-gradient(135deg,#20143a,#5A2E8C);color:#fff;border-radius:20px;padding:24px 20px;margin-top:16px;text-align:center}
+.more .k{font-size:12px;font-weight:800;opacity:.85;letter-spacing:.15em;margin-bottom:8px}
+.more h3{font-size:19px;font-weight:900;margin-bottom:6px}.more p{font-size:13.5px;opacity:.95;line-height:1.6;margin-bottom:14px}
+.more a{display:block;text-decoration:none;font-weight:900;font-size:14.5px;padding:14px;border-radius:12px;margin-top:9px}
+.more a.p{background:#FFD56B;color:#4A1F6B}.more a.o{background:transparent;color:#fff;border:1.6px solid rgba(255,255,255,.55)}
+.foot{text-align:center;font-size:12px;color:var(--muted);margin-top:22px;line-height:1.6}
+.toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%);background:#2A2540;color:#fff;padding:12px 20px;border-radius:999px;font-size:14px;font-weight:700;opacity:0;pointer-events:none;transition:opacity .25s;z-index:99}
+.toast.on{opacity:1}
+.print-only{display:none}
+@media print{ body{background:#fff}.no-print{display:none!important}.print-only{display:block!important}
+  .wrap{max-width:100%;padding:0}.card{box-shadow:none;border:1px solid #e5e0f0;break-inside:avoid;margin:6px 0}
+  .hero,.bar .fill,.chips span,.more,.affirm,.val{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  @page{size:A4;margin:12mm} }
+</style>
+</head>
+<body>
+<div class="top">
+  <div class="badge">PBS COLOR LAB</div>
+  <h1>컬러강점 결과 보기 · 일반용</h1>
+  <p>종이 진단지의 <b>4색 엔진 점수</b>를 넣으면<br>나의 대표 엔진과 상세 해석이 나와요</p>
+</div>
+<div class="wrap">
+  <section id="s-input" class="screen active no-print">
+    <div class="card">
+      <h2>✏️ 4색 엔진 점수를 입력하세요</h2>
+      <p class="sub">종이 진단지에서 <b>기어 3개 합계로 구한 엔진 점수</b>를 색깔별로 그대로 적어주세요. 하나 넣으면 자동으로 다음 칸으로 넘어갑니다.</p>
+      <div id="score-list"></div>
+      <div class="remain" id="remain">4색 엔진 점수를 모두 넣어주세요</div>
+    </div>
+    <button class="btn" onclick="showResult()">결과 보기 →</button>
+    <p class="hint">가장 높은 점수의 색이 나의 1순위 엔진입니다.</p>
+  </section>
+  <section id="s-result" class="screen"></section>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+const ORDER=['RED','YELLOW','GREEN','BLUE'];
+const ENGINE_DATA = {
+  RED: { name:'RED 추진 엔진', shortName:'추진', subtitle:'외향형 · 행동형 · 일·성과 중심', color:'#FF3366', quote:'되는지 안 되는지는 해봐야 안다',
+    tags:['외향형','일·성과 중심','행동 우선','결과 지향','추진력','도전 정신'],
+    strengths:['빠른 의사결정과 즉각적 실행력','어떤 환경에서도 목표를 향해 돌진하는 추진력','도전적 상황에서 오히려 폭발하는 에너지','결과를 만들어내는 강한 집중력','상황을 주도하는 리더십'],
+    jobs:['창업·스타트업 경영, 기업가','영업·마케팅·비즈니스 개발','프로젝트 매니지먼트(PM)','스포츠·경쟁 분야, 군·경찰·소방','이벤트 기획 및 실행 리더'],
+    communication:'직접적이고 명확하게, 결론부터 이야기합니다. 빙빙 도는 표현을 답답해하고 빠른 응답과 실행을 선호합니다.',
+    romance:'열정적이고 직접적으로 감정을 표현합니다. 좋아하면 적극적으로 다가가고, 함께 목표를 향해 나아가는 파트너십을 중시합니다.',
+    conflict:'문제를 정면 돌파하고 즉각 해결을 선호합니다. 때로 너무 강하게 밀어붙일 수 있으나 갈등 후 빠르게 털어냅니다.',
+    values:[{t:'성취와 도전',d:'한계를 시험할 때 가장 큰 에너지를 얻습니다. 평탄한 성공보다 의미 있는 시도 자체에서 가치를 확인합니다.',b:'자기결정성이론(Deci & Ryan)의 유능감 욕구, McClelland의 성취동기, 몰입(Flow)과 연결.'},
+      {t:'자유',d:'스스로 결정·실행하는 자율성이 핵심 동력입니다. 통제와 절차가 많을수록 동기가 식습니다.',b:'SDT의 자율성 욕구, DISC의 D, Big5 외향성 Activity facet과 일치.'},
+      {t:'인정',d:'노력과 결과에 대한 명확한 평가가 동기를 유지시킵니다. 구체적 피드백이 필요합니다.',b:'McClelland 성취동기 이론, 변혁적 리더십의 조건적 보상 원리.'}],
+    growth:[{t:'100%가 아니어도 괜찮다 인정하기',d:'완벽주의를 동력으로 쓰되 "충분히 좋음"의 기준을 함께 두면 장기 성과로 이어집니다.',b:'Stoeber & Otto의 적응적/부적응적 완벽주의, Simon의 satisficing.'},
+      {t:'팀원의 페이스 배려하기',d:'"내 속도가 기본값"이라는 가정을 내려놓고 타인의 학습 곡선을 함께 설계하면 팀 성과가 지속됩니다.',b:'Bass 변혁적 리더십의 개별적 배려, Goleman 정서지능의 사회적 인식.'},
+      {t:'감정을 나누는 관계의 깊이',d:'성과 관계만으로 채워지지 않는 영역이 있습니다. 감정 표현 경험이 장기 회복력을 결정합니다.',b:'SDT의 관계성 욕구, Bowlby 애착의 안전 기지.'}],
+    affirmations:['나의 추진력과 행동력은 세상을 움직이는 힘이다','나는 도전할 때 가장 빛나며, 그것이 나의 본질이다','나의 열정은 주변에 영감과 에너지를 준다'] },
+  YELLOW: { name:'YELLOW 관계 엔진', shortName:'관계', subtitle:'외향형 · 표현형 · 사람·과정 중심', color:'#F5A623', quote:'함께하면 더 커진다',
+    tags:['외향형','사람·과정 중심','표현 우선','영향력 지향','소통·연결','공감 능력'],
+    strengths:['사람들을 자연스럽게 연결하고 모이게 하는 능력','따뜻한 공감과 소통으로 신뢰를 쌓는 힘','밝고 긍정적인 에너지로 분위기를 바꾸는 영향력','창의적 아이디어를 생동감 있게 표현','누구와도 친해지는 사회성'],
+    jobs:['교육·강의·코칭·멘토링','홍보·PR·브랜드 마케팅','방송·유튜브·크리에이터','이벤트·행사 기획 및 진행','커뮤니티·커뮤니케이션 전문가'],
+    communication:'이야기로 소통하고 감정과 경험을 나누는 것을 즐깁니다. 유머와 따뜻함으로 분위기를 부드럽게 만듭니다.',
+    romance:'표현이 풍부하고 낭만적입니다. 감정을 아낌없이 드러내며 함께하는 시간의 분위기를 소중히 합니다.',
+    conflict:'대화와 공감으로 풀려 하고 관계 회복을 최우선합니다. 때로 갈등을 피하려 불만을 삼키기도 합니다.',
+    values:[{t:'연결',d:'사람들과의 깊은 유대감이 삶의 의미를 만듭니다. 함께 만든 경험에서 더 큰 충족을 느낍니다.',b:'SDT의 관계성 욕구, Baumeister & Leary의 소속 가설, Big5 외향성·친화성.'},
+      {t:'표현',d:'자신을 창의적으로 드러낼 때 가장 살아 있다고 느낍니다. 자기 색을 입힐 수 있는 일에서 동기가 생깁니다.',b:'Rogers의 자기실현·진정성, Big5 개방성의 미적 감수성.'},
+      {t:'영향력',d:'긍정적 변화를 만드는 것이 핵심 가치입니다. 누군가의 마음을 움직였다는 피드백이 강력한 보상입니다.',b:'Bandura의 자기효능감, 변혁적 리더십의 영감적 동기부여.'}],
+    growth:[{t:'깊이 있는 실행·마무리 습관',d:'시작에 강한 만큼 끝까지 끌고 가는 근육을 기르면 좋습니다. 작은 완성 경험이 출발점입니다.',b:'Big5 성실성의 근면성 facet, Gollwitzer의 실행 의도.'},
+      {t:'경계 설정 — 내 에너지도 소중히',d:'모두에게 좋은 사람이 되려는 시도는 자신을 소진시킵니다. 한계를 인정하면 관계의 질이 오히려 높아집니다.',b:'Hochschild의 정서노동, Neff의 자기자비.'},
+      {t:'혼자만의 시간으로 내면 충전',d:'외향형도 회복을 위해 혼자의 시간이 필요합니다. 생각이 쌓일 공간을 의식적으로 만들어 주세요.',b:'Cain의 회복 장소, Kaplan의 주의 회복 이론.'}],
+    affirmations:['나의 따뜻한 에너지는 사람들의 삶을 밝게 비추는 빛이다','나는 사람들을 연결하고 함께 성장하게 만드는 능력이 있다','나의 긍정 에너지는 환경을 바꾸는 힘이다'] },
+  GREEN: { name:'GREEN 조화 엔진', shortName:'조화', subtitle:'내향형 · 배려형 · 사람·과정 중심', color:'#00A878', quote:'오래 함께 가는 것이 가장 강하다',
+    tags:['내향형','사람·과정 중심','배려 우선','지속·안정 지향','공동체 의식','신뢰 관계'],
+    strengths:['사람들을 진심으로 배려하고 돕는 따뜻한 마음','한번 맺은 관계를 오래 지키는 신뢰와 충성','팀의 조화와 균형을 유지하는 안정적 역할','꾸준하고 성실하게 성장하는 인내심','깊은 경청과 공감으로 상대를 치유'],
+    jobs:['교사·교육자·상담사·사회복지사','의료·간호·치료·재활 분야','인사·조직문화 담당(HR)','NGO·비영리·사회적 기업','팀 서포터·프로젝트 조율자'],
+    communication:'부드럽고 신중하게 말하며 상대의 감정을 먼저 헤아립니다. 직접적 대립보다 중재와 합의를 선호합니다.',
+    romance:'깊고 안정적인 관계를 추구합니다. 자극보다 평온에서 사랑을 느끼며 헌신적입니다.',
+    conflict:'갈등을 피하려 하지만 불가피할 땐 차분히 풀어냅니다. 상대 입장을 충분히 들은 뒤 해결책을 찾습니다.',
+    values:[{t:'조화',d:'사람들이 평화롭게 공존하는 환경을 만드는 것이 중요합니다. 신뢰가 흐르는 공간에서 가장 안정적입니다.',b:'Big5 친화성의 협력·겸손 facet, Tomasello의 협력 진화심리학.'},
+      {t:'성장',d:'한 번에 큰 변화보다 꾸준히 나아지는 여정을 즐깁니다. 작은 성장의 누적이 깊은 자기 신뢰가 됩니다.',b:'Dweck의 성장 마인드셋, Aristotle의 에우다이모니아.'},
+      {t:'신뢰',d:'관계의 일관성과 진심이 가장 중요한 자산입니다. 시간이 쌓인 관계에서 깊은 안정을 느낍니다.',b:'Bowlby 애착 이론, Putnam의 사회적 자본.'}],
+    growth:[{t:'내 욕구·감정도 솔직히 표현하기',d:'타인을 우선하는 습관은 강점이지만 자기 욕구를 침묵시키면 소진의 원인이 됩니다.',b:'Jack의 자기침묵 이론, SDT의 자율성 욕구.'},
+      {t:'거절할 수 있는 용기',d:'모든 요청을 받는 것이 친절은 아닙니다. 한계를 지키는 거절이 관계를 건강하게 만듭니다.',b:'Alberti & Emmons의 적극성 훈련, Figley의 공감 피로.'},
+      {t:'변화를 성장의 기회로',d:'모든 변화를 위협으로 보면 가능성을 놓칩니다. "무엇을 배울 수 있을까"로 전환해 보세요.',b:'Dweck 성장 마인드셋, Kolb 경험학습 사이클.'}],
+    affirmations:['나의 배려와 따뜻함은 세상을 더 좋게 만드는 힘이다','나는 천천히, 그러나 확실하게 성장하고 있다','나의 조화로운 에너지는 공동체를 하나로 묶는다'] },
+  BLUE: { name:'BLUE 분석 엔진', shortName:'분석', subtitle:'내향형 · 사고형 · 일·성과 중심', color:'#0077B6', quote:'제대로 하지 않을 거라면 하지 않는 게 낫다',
+    tags:['내향형','일·성과 중심','분석 우선','정확성 지향','논리적 사고','체계화 능력'],
+    strengths:['복잡한 데이터를 분석해 핵심을 도출하는 논리력','정밀하고 체계적인 계획 수립과 실행','깊이 있는 연구와 탐구를 즐기는 학습 능력','품질과 정확도에 대한 높은 기준','직관과 논리를 결합한 통찰력'],
+    jobs:['데이터 사이언티스트·AI·IT 개발','연구원·학자·전문 분야 전문가','전략 컨설턴트·경영 분석가','의사·법조인·회계사·세무사','철학·인문학·심층 저술'],
+    communication:'정확하고 논리적으로, 사실과 근거를 바탕으로 이야기합니다. 감정적 대화보다 구체적 내용을 선호합니다.',
+    romance:'천천히 신중하게 관계를 발전시킵니다. 표현은 서툴어 보여도 깊고 진지하게 헌신합니다.',
+    conflict:'감정보다 논리로 갈등을 분석하고 해결책을 찾습니다. 충분히 생각한 뒤 차분하게 대응합니다.',
+    values:[{t:'정확성',d:'올바른 정보와 완성도 높은 결과에 대한 기준이 동력입니다. 한 번에 제대로 하는 것이 편합니다.',b:'Big5 성실성의 질서·신중 facet, Cacioppo & Petty의 인지 욕구.'},
+      {t:'깊이',d:'표면적 답이 아닌 본질·구조를 이해할 때 만족합니다. 끝까지 파고드는 사고에서 의미를 찾습니다.',b:'Big5 개방성의 지적 호기심, Dweck 숙달 지향, 몰입(Flow).'},
+      {t:'자율',d:'자기 방식으로 탐구할 자유가 가장 중요합니다. 지나친 간섭이 큰 스트레스원입니다.',b:'SDT의 자율성 욕구, Deci의 내재 동기 실험.'}],
+    growth:[{t:'"완벽"보다 "충분히 좋음"',d:'완벽주의는 품질의 무기지만 자신을 향할 땐 실행을 막습니다. "이 단계는 70%면 출시" 기준이 필요합니다.',b:'Stoeber & Otto의 완벽주의 구분, Simon의 satisficing.'},
+      {t:'감정을 논리만큼 소중히',d:'감정은 논리의 반대가 아니라 의사결정의 또 다른 정보원입니다. 감정 신호를 데이터로 받아들이세요.',b:'Mayer & Salovey·Goleman의 정서지능, Damasio의 신체 표지 가설.'},
+      {t:'빠른 실행·피드백 반복',d:'완벽한 분석 후 실행이 아니라 작게 실행→피드백→수정의 사이클을 짧게 도는 것이 강점을 살립니다.',b:'Ries의 린 스타트업, Boyd의 OODA loop, 분석 마비 예방.'}],
+    affirmations:['나의 분석력과 논리는 복잡한 문제를 푸는 열쇠다','완벽을 추구하는 나의 기준이 세상의 질을 높인다','나의 통찰은 보이지 않는 것을 보게 하는 재능이다'] }
+};
+
+(function build(){
+  document.getElementById('score-list').innerHTML=ORDER.map(c=>{ const d=ENGINE_DATA[c];
+    return `<div class="score-row" data-c="${c}"><div class="dot">${c[0]}</div>
+      <div class="lab"><b>${c} · ${d.shortName} 엔진</b><span>${d.subtitle}</span></div>
+      <input id="sc-${c}" type="number" min="0" max="99" inputmode="numeric" enterkeyhint="next" placeholder="점수"
+        oninput="onScoreInput(this)" onkeydown="if(event.key==='Enter'){event.preventDefault();scoreNext(this);}"></div>`;}).join('');
+})();
+function scoreInputs(){ return ORDER.map(c=>document.getElementById('sc-'+c)); }
+function scoreNext(el){ const a=scoreInputs(),i=a.indexOf(el);
+  if(i>-1&&i<a.length-1){const n=a[i+1];n.focus();try{n.select();}catch(e){}} else if(i===a.length-1){el.blur();} }
+function onScoreInput(el){ let v=el.value.replace(/[^0-9]/g,'').slice(0,2); if(v!==el.value)el.value=v;
+  updateRemain(); if(v.length>=2) scoreNext(el); }
+function updateRemain(){ let n=0; scoreInputs().forEach(el=>{if(el.value!==''&&!isNaN(parseInt(el.value)))n++;});
+  document.getElementById('remain').textContent = n<4?`${4-n}색 점수가 남았어요 (${n}/4)`:'모두 입력 완료! 결과를 볼 수 있어요'; }
+
+let LAST=null,_star=0,_fbImg=null;
+function showResult(){
+  const scores={}; let miss=null;
+  for(const c of ORDER){ const el=document.getElementById('sc-'+c),v=parseInt(el.value,10);
+    if(el.value===''||isNaN(v)){ if(!miss)miss=el; scores[c]=0; } else scores[c]=v; }
+  if(miss){ toast('4색 엔진 점수를 모두 넣어주세요'); miss.focus(); return; }
+  const ranked=[...ORDER].sort((a,b)=>scores[b]-scores[a]), top=ranked[0], d=ENGINE_DATA[top];
+  const max=Math.max(...ORDER.map(c=>scores[c]),1); LAST={scores,ranked,top};
+  const bars=ranked.map(c=>{ const s=scores[c],pct=Math.round(s/max*100);
+    return `<div class="bar"><div class="bd" style="background:${ENGINE_DATA[c].color}">${c[0]}</div><div class="bt">
+      <div class="n"><span>${c} · ${ENGINE_DATA[c].shortName}</span><span>${s}점</span></div>
+      <div class="track"><div class="fill" style="width:${pct}%;background:${ENGINE_DATA[c].color}"></div></div></div></div>`;}).join('');
+  const secondEng = ENGINE_DATA[ranked[1]];
+  document.getElementById('s-result').innerHTML=`
+    <div class="hero" style="background:linear-gradient(150deg,${d.color},${shade(d.color)})">
+      <div class="kicker">나의 1순위 엔진</div><h2>${d.name}</h2>
+      <div class="stitle">${d.subtitle}</div>
+      <div class="quote">“${d.quote}”</div></div>
+    <div class="card"><h2>🎨 나의 엔진 점수</h2>
+      <p class="sub" style="margin-bottom:8px">1순위 <b>${d.shortName}</b> · 2순위 <b>${secondEng.shortName}</b> 조합이 당신을 나타냅니다.</p>${bars}</div>
+    <div class="card">
+      <div class="sec"><h3>🧭 성격·핵심 키워드</h3>
+        <div class="chips">${d.tags.map(t=>`<span>${t}</span>`).join('')}</div></div>
+      <div class="sec"><h3>💎 핵심 가치·동기</h3>
+        ${d.values.map(v=>`<div class="val"><b>${v.t}</b><p>${v.d}</p><div class="basis">📖 ${v.b}</div></div>`).join('')}</div>
+      <div class="sec"><h3>🌟 대표 강점</h3><ul>${d.strengths.map(s=>`<li>${s}</li>`).join('')}</ul></div>
+      <div class="sec"><h3>🎯 어울리는 진로·직업</h3><div class="chips job">${d.jobs.map(j=>`<span>${j}</span>`).join('')}</div></div>
+      <div class="sec"><h3>🤝 대인관계·소통</h3>
+        <div class="mini"><div><b>소통 스타일</b> · ${d.communication}</div>
+          <div><b>관계·연애</b> · ${d.romance}</div>
+          <div><b>갈등 대처</b> · ${d.conflict}</div></div></div>
+      <div class="sec"><h3>📚 성장·학습 포인트</h3>
+        ${d.growth.map(g=>`<div class="val"><b>${g.t}</b><p>${g.d}</p><div class="basis">📖 ${g.b}</div></div>`).join('')}</div>
+      <div class="sec"><h3>✨ 나를 위한 자기확언</h3>
+        <div class="affirm">${d.affirmations.map(a=>`<p>${a}</p>`).join('')}</div></div>
+    </div>
+    <div class="card no-print">
+      <h2>💜 오늘 진단, 어떠셨나요?</h2>
+      <p class="sub">별점과 소감을 남기면 결과를 PDF로 저장할 수 있어요 📄</p>
+      <div class="field"><label>⭐ 별점</label><div class="stars" id="stars">${[1,2,3,4,5].map(n=>`<span data-n="${n}" onclick="setStar(${n})">★</span>`).join('')}</div></div>
+      <div class="field"><label>💬 오늘 알게 된 점·느낀 점</label><textarea id="fb" placeholder="예: 내 강점과 성장 포인트가 명확해졌어요 :)"></textarea></div>
+      <div class="field"><label>📷 사진 첨부 <span style="color:var(--muted);font-weight:600">(선택)</span></label><input type="file" accept="image/*" onchange="pickImg(this)"><div id="imgprev"></div></div>
+      <button class="btn" onclick="savePDF()">📄 소감 남기고 결과 PDF 받기</button>
+      <p class="hint">버튼을 누르면 인쇄 창이 열려요. "PDF로 저장"을 고르면 돼요.</p>
+    </div>
+    <div class="print-only" id="print-fb"></div>
+    <div class="more no-print">
+      <div class="k">MORE</div><h3>더 알아보기</h3>
+      <p>강사·컨설팅·자격과정 등 컬러강점을 더 깊이 활용하고 싶다면 이어가 보세요.</p>
+      <!-- ▼ 링크는 확정 후 교체하세요 ▼ -->
+      <a class="p" href="https://www.pbscolor.com" target="_blank" rel="noopener">🎨 최해숙 컬러강점 · 프로그램 보기</a>
+      <a class="o" href="https://choisite.vercel.app/book48.html" target="_blank" rel="noopener">✨ 책 48문항 무료 진단</a>
+    </div>
+    <button class="btn ghost no-print" style="margin-top:14px" onclick="restart()">↺ 점수 다시 입력하기</button>
+    <div class="foot">PBS 컬러강점 · 4엔진 컬러 진단 · 최해숙 대표<br>본 진단은 자기 이해를 위한 참고 도구입니다.</div>`;
+  document.getElementById('s-input').classList.remove('active');
+  document.getElementById('s-result').classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function shade(hex){ const n=parseInt(hex.slice(1),16); let r=(n>>16)&255,g=(n>>8)&255,b=n&255;
+  r=Math.round(r*.68);g=Math.round(g*.68);b=Math.round(b*.68);
+  return '#'+((1<<24)+(r<<16)+(g<<8)+b).toString(16).slice(1); }
+function setStar(n){ _star=n; document.querySelectorAll('#stars span').forEach(s=>{s.style.color=(+s.dataset.n<=n)?'#F5A623':'#E3DFF0';}); }
+function pickImg(input){ const f=input.files&&input.files[0]; if(!f)return; const img=new Image(),rd=new FileReader();
+  rd.onload=e=>{img.onload=()=>{ const max=900; let w=img.width,h=img.height;
+    if(w>max||h>max){if(w>h){h=Math.round(h*max/w);w=max;}else{w=Math.round(w*max/h);h=max;}}
+    const c=document.createElement('canvas');c.width=w;c.height=h;c.getContext('2d').drawImage(img,0,0,w,h);
+    _fbImg=c.toDataURL('image/jpeg',.75); document.getElementById('imgprev').innerHTML=`<img src="${_fbImg}">`;
+  };img.src=e.target.result;}; rd.readAsDataURL(f); }
+function savePDF(){ const fb=(document.getElementById('fb').value||'').trim(), pf=document.getElementById('print-fb'), d=ENGINE_DATA[LAST.top];
+  pf.innerHTML=`<div class="card"><h2>💜 나의 소감</h2><p style="font-size:13px;color:#524F6A">별점: ${'★'.repeat(_star||0)}${'☆'.repeat(5-(_star||0))}</p>
+    ${fb?`<p style="margin-top:6px;font-size:15px">${esc(fb)}</p>`:''}
+    ${_fbImg?`<img src="${_fbImg}" style="max-width:100%;max-height:300px;border-radius:12px;margin-top:8px">`:''}
+    <p style="margin-top:10px;font-size:13px;color:#8A87A6">PBS 컬러강점 · 나의 1순위 엔진은 ${d.name}!</p></div>`;
+  toast('결과지를 PDF로 저장해요 📄'); setTimeout(()=>window.print(),350); }
+function esc(s){ return s.replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m])); }
+function restart(){ document.getElementById('s-result').classList.remove('active');
+  document.getElementById('s-input').classList.add('active');
+  scoreInputs().forEach(el=>el.value='');_star=0;_fbImg=null;updateRemain(); window.scrollTo({top:0,behavior:'smooth'}); }
+let _tt; function toast(msg){ const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('on'); clearTimeout(_tt); _tt=setTimeout(()=>t.classList.remove('on'),2200); }
+</script>
+</body>
+</html>
